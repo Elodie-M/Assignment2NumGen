@@ -6,9 +6,18 @@
  */
 
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-function App() {
+const Stack = createNativeStackNavigator();
+function HomeScreen({navigation}: any) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -24,10 +33,23 @@ function App() {
           <Text style={styles.buttonText}>Generate</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>View Statistics</Text>
+        <TouchableOpacity style={styles.button}
+            onPress={() => navigation.navigate('Statistics')}>
+            <Text style={styles.buttonText}>View Statistics</Text>
         </TouchableOpacity>
       </View>
+    </SafeAreaView>
+  );
+}
+
+function StatisticsScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Statistics</Text>
+      </View>
+
+      <View style={styles.content} />
     </SafeAreaView>
   );
 }
@@ -83,4 +105,13 @@ buttonText: {
 },
 });
 
-export default App;
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Statistics" component={StatisticsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
