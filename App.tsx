@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useState, useCallback} from 'react';
 import {
   SafeAreaView,
   View,
@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 
@@ -38,6 +38,11 @@ function HomeScreen({navigation}: any) {
   const [currentNumber, setCurrentNumber] = useState('...');
   const [isGenerating, setIsGenerating] = useState(false);
   const {statistics, setStatistics} = useContext(StatisticsContext);
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentNumber('...');
+    }, []),
+  );
   const generateNumber = () => {
   if (isGenerating) return;
 
