@@ -1,8 +1,35 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Commands Used:
  *
- * @format
+ * Project Setup:
+ * npx @react-native-community/cli@latest init Assignment2NumGen
+ *
+ * Running the App:
+ * npx react-native start
+ * npx react-native run-android
+ *
+ * Android Setup:
+ * export ANDROID_HOME=/Users/elodiemesiha/Library/Android/sdk
+ * cd android
+ * ./gradlew clean
+ * cd ..
+ *
+ * Notes:
+ * - Android emulator initially failed due to SDK path not being set
+ * - Fixed by setting ANDROID_HOME and cleaning the build
+ * 
+ * Resources Used:
+ * 1. React Native Documentation
+ * https://reactnative.dev/docs/getting-started
+ * 
+ * 2. React Navigation Documentation
+ * https://reactnavigation.org/docs/getting-started
+ * 
+ * 3. FlatList Documentation
+ * https://reactnative.dev/docs/flatlist
+ * 
+ * 4. React Context (createContext, useContext)
+ * https://react.dev/reference/react/createContext
  */
 
 import React, {createContext, useContext, useState, useCallback} from 'react';
