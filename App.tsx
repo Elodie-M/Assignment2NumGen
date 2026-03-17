@@ -20,10 +20,6 @@ const Stack = createNativeStackNavigator();
 function HomeScreen({navigation}: any) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Random Number Generator</Text>
-      </View>
-
       <View style={styles.content}>
         <Text style={styles.numberText}>...</Text>
       </View>
@@ -42,14 +38,32 @@ function HomeScreen({navigation}: any) {
   );
 }
 
-function StatisticsScreen() {
+function StatisticsScreen({navigation}: any) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Statistics</Text>
+      <View style={styles.statsContent}>
+        <Text style={styles.statText}>Number 1:   0 times</Text>
+        <Text style={styles.statText}>Number 2:   0 times</Text>
+        <Text style={styles.statText}>Number 3:   0 times</Text>
+        <Text style={styles.statText}>Number 4:   0 times</Text>
+        <Text style={styles.statText}>Number 5:   0 times</Text>
+        <Text style={styles.statText}>Number 6:   0 times</Text>
+        <Text style={styles.statText}>Number 7:   0 times</Text>
+        <Text style={styles.statText}>Number 8:   0 times</Text>
+        <Text style={styles.statText}>Number 9:   0 times</Text>
       </View>
 
-      <View style={styles.content} />
+      <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Clear Statistics</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>Back to Home</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -64,6 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8b5e3c',
     paddingVertical: 14,
     paddingHorizontal: 14,
+    flexDirection: 'row',
   },
 
   headerTitle: {
@@ -103,14 +118,52 @@ buttonText: {
   fontSize: 18,
   fontWeight: 'bold',
 },
+statsContent: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingHorizontal: 20,
+},
+
+statText: {
+  color: 'white',
+  fontSize: 16,
+  marginBottom: 28,
+},
+backButton: {
+  marginRight: 12,
+},
+
+backArrow: {
+  color: 'white',
+  fontSize: 22,
+  fontWeight: 'bold',
+},
 });
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Statistics" component={StatisticsScreen} />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: 'Random Number Generator',
+            headerLeft: () => null,
+            headerStyle: { backgroundColor: '#8b5e3c' },
+            headerTintColor: 'white',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}/>
+          <Stack.Screen
+            name="Statistics"
+            component={StatisticsScreen}
+            options={{
+              title: 'Statistics',
+              headerStyle: { backgroundColor: '#8b5e3c' },
+              headerTintColor: 'white',
+              headerTitleStyle: { fontWeight: 'bold' },
+            }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
