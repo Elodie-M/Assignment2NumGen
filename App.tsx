@@ -5,27 +5,54 @@
  * @format
  */
 
-import React from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  //FlatList,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+
+const StatisticsContext = createContext<any>(null);
+
+const initialStatistics = [
+  {number: 1, count: 0},
+  {number: 2, count: 0},
+  {number: 3, count: 0},
+  {number: 4, count: 0},
+  {number: 5, count: 0},
+  {number: 6, count: 0},
+  {number: 7, count: 0},
+  {number: 8, count: 0},
+  {number: 9, count: 0},
+];
 const Stack = createNativeStackNavigator();
 function HomeScreen({navigation}: any) {
+  const [currentNumber, setCurrentNumber] = useState('...');
+  const {statistics, setStatistics} = useContext(StatisticsContext);
+  const generateNumber = () => {
+    const random = Math.floor(Math.random() * 9) + 1;
+    setCurrentNumber(random.toString());
+
+    const updatedStatistics = statistics.map((item: any) =>
+      item.number === random ? {...item, count: item.count + 1} : item,
+  );
+
+  setStatistics(updatedStatistics);
+};
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.numberText}>...</Text>
+        <Text style={styles.numberText}>{currentNumber}</Text>
       </View>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={generateNumber}>
           <Text style={styles.buttonText}>Generate</Text>
         </TouchableOpacity>
 
@@ -74,18 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#b08968',
     paddingTop: 50,
   },
-  header: {
-    backgroundColor: '#8b5e3c',
-    paddingVertical: 14,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-  },
-
-  headerTitle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   
   content: {
     flex: 1,
@@ -130,41 +145,38 @@ statText: {
   fontSize: 16,
   marginBottom: 28,
 },
-backButton: {
-  marginRight: 12,
-},
-
-backArrow: {
-  color: 'white',
-  fontSize: 22,
-  fontWeight: 'bold',
-},
 });
 
 export default function App() {
+  const [statistics, setStatistics] = useState(initialStatistics);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: 'Random Number Generator',
-            headerLeft: () => null,
-            headerStyle: { backgroundColor: '#8b5e3c' },
-            headerTintColor: 'white',
-            headerTitleStyle: { fontWeight: 'bold' },
-          }}/>
+    <StatisticsContext.Provider value={{statistics, setStatistics}}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: 'Random Number Generator',
+              headerLeft: () => null,
+              headerStyle: {backgroundColor: '#8b5e3c'},
+              headerTintColor: 'white',
+              headerTitleStyle: {fontWeight: 'bold'},
+            }}
+          />
           <Stack.Screen
             name="Statistics"
             component={StatisticsScreen}
             options={{
               title: 'Statistics',
-              headerStyle: { backgroundColor: '#8b5e3c' },
+              headerStyle: {backgroundColor: '#8b5e3c'},
               headerTintColor: 'white',
-              headerTitleStyle: { fontWeight: 'bold' },
-            }}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+              headerTitleStyle: {fontWeight: 'bold'},
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StatisticsContext.Provider>
   );
 }
