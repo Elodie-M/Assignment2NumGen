@@ -12,7 +12,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  //FlatList,
+  FlatList,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -82,28 +82,33 @@ function HomeScreen({navigation}: any) {
 }
 
 function StatisticsScreen({navigation}: any) {
+  const {statistics, setStatistics} = useContext(StatisticsContext);
+  const clearStatistics = () => {
+  setStatistics(initialStatistics);
+};
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.statsContent}>
-        <Text style={styles.statText}>Number 1:   0 times</Text>
-        <Text style={styles.statText}>Number 2:   0 times</Text>
-        <Text style={styles.statText}>Number 3:   0 times</Text>
-        <Text style={styles.statText}>Number 4:   0 times</Text>
-        <Text style={styles.statText}>Number 5:   0 times</Text>
-        <Text style={styles.statText}>Number 6:   0 times</Text>
-        <Text style={styles.statText}>Number 7:   0 times</Text>
-        <Text style={styles.statText}>Number 8:   0 times</Text>
-        <Text style={styles.statText}>Number 9:   0 times</Text>
+        <FlatList
+          data={statistics}
+          keyExtractor={(item) => item.number.toString()}
+          contentContainerStyle={styles.statsList}
+          renderItem={({item}) => (
+            <Text style={styles.statText}>
+              Number {item.number}: {item.count} times
+            </Text>
+          )}
+        />
       </View>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={clearStatistics}>
           <Text style={styles.buttonText}>Clear Statistics</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Back to Home</Text>
         </TouchableOpacity>
       </View>
@@ -160,6 +165,12 @@ statText: {
   color: 'white',
   fontSize: 16,
   marginBottom: 28,
+},
+
+statsList: {
+  flexGrow: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
 },
 });
 
