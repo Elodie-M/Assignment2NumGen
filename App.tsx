@@ -31,19 +31,35 @@ const initialStatistics = [
   {number: 8, count: 0},
   {number: 9, count: 0},
 ];
+
 const Stack = createNativeStackNavigator();
+
 function HomeScreen({navigation}: any) {
   const [currentNumber, setCurrentNumber] = useState('...');
+  const [isGenerating, setIsGenerating] = useState(false);
   const {statistics, setStatistics} = useContext(StatisticsContext);
   const generateNumber = () => {
-    const random = Math.floor(Math.random() * 9) + 1;
-    setCurrentNumber(random.toString());
+  if (isGenerating) return;
+
+  setIsGenerating(true);
+
+  let finalRandom = 1;
+
+  const interval = setInterval(() => {
+    finalRandom = Math.floor(Math.random() * 9) + 1;
+    setCurrentNumber(finalRandom.toString());
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(interval);
 
     const updatedStatistics = statistics.map((item: any) =>
-      item.number === random ? {...item, count: item.count + 1} : item,
-  );
+      item.number === finalRandom ? {...item, count: item.count + 1} : item,
+    );
 
-  setStatistics(updatedStatistics);
+    setStatistics(updatedStatistics);
+    setIsGenerating(false);
+  }, 1000);
 };
   return (
     <SafeAreaView style={styles.container}>
@@ -52,7 +68,7 @@ function HomeScreen({navigation}: any) {
       </View>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button} onPress={generateNumber}>
+        <TouchableOpacity style={styles.button} onPress={generateNumber} disabled={isGenerating}>
           <Text style={styles.buttonText}>Generate</Text>
         </TouchableOpacity>
 
